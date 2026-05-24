@@ -1,6 +1,7 @@
 package com.study.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.study.entity.Profile;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,32 +10,26 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 
-@WebServlet("/json")
-public class JsonServlet extends HttpServlet {
+// localhost:8080/pojo
 
-    // 자동파싱 라이브러리(jackson)
-    // java객체 <> JSON 변환
+@WebServlet("/pojo")
+public class PojoServlet extends HttpServlet {
+
+    // jackson 라이브러리
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        // 응답타입을 JSON
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
-        // 객체 혹은 Map으로 JSON을 만듬
-        Map<String, Object> data = new HashMap<>();
-        data.put("message", "응답성공!");
-        data.put("responseCode", 200);
-        data.put("isSuccess", true);
+        Profile profile = new Profile("홍길동", 20, "hong@sample.com");
 
-        String json = objectMapper.writeValueAsString(data);
+        String json = objectMapper.writeValueAsString(profile);
 
         PrintWriter writer = resp.getWriter();
+
         writer.write(json);
 
     }
